@@ -29,8 +29,9 @@ public class SnakeFrame extends JFrame {
     }
 
     private void initGame() {
-        player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D);
-        player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L);
+        // Initialize players with their respective keys
+        player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
+        player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false);
         Runnable gameRunnable = new Game(gameField, player1, player2, this);
         gameThread = new Thread(gameRunnable);
         gameField.requestFocusInWindow(); // Request focus for key input
@@ -71,8 +72,8 @@ public class SnakeFrame extends JFrame {
 
     private void resetGame() {
         started = false;
-        player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D);
-        player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L);
+        player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
+        player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false);
         scorePanel.clear();
         gameField.initDefaults();
         scorePanel.repaint();
