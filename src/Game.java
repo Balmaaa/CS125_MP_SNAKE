@@ -12,17 +12,17 @@ public class Game implements Runnable {
     }
 
     @Override
-public void run() {
-    while (player1.isAlive() && player2.isAlive()) {
-        player1.update(); // Move player 1
-        player2.update(); // Move player 2
-        gameField.repaint(); // Repaint the game field
-        try {
-            Thread.sleep(100); // Control the speed of the game
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    public void run() {
+        while (player1.isAlive() && player2.isAlive()) {
+            player1.update(); // Move player 1
+            player2.update(); // Move player 2
+            gameField.repaint(); // Repaint the game field
+            try {
+                Thread.sleep(100); // Control the speed of the game
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        frame.gameOver();
     }
-    frame.gameOver();
-}
 }

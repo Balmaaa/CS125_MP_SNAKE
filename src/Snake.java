@@ -12,9 +12,9 @@ public class Snake {
     private GameField gameField;
     private ScorePanel scorePanel;
     private boolean alive = true;
-    private boolean isPlayer1;  // This will differentiate player 1 and player 2
+    private boolean isPlayer1;  
 
-    // Constructor
+    
     public Snake(GameField gameField, ScorePanel scorePanel, Direction initialDirection, 
                  int upKey, int leftKey, int downKey, int rightKey, boolean isPlayer1) {
         this.gameField = gameField;
@@ -23,16 +23,21 @@ public class Snake {
         this.direction = initialDirection;
         this.isPlayer1 = isPlayer1;
 
-        // Initialize the snake with 4 parts
-        for (int i = 0; i < 4; i++) {
-            parts.add(new Ellipse2D.Double(100 + (isPlayer1 ? 160 : 0), 100 + i * moveSize, moveSize, moveSize));
+        
+        
+        double startX = 150 + (isPlayer1 ? 160 : 0);
+        double startY = 150;
+
+        
+        parts.add(new Ellipse2D.Double(startX, startY, moveSize, moveSize)); 
+        for (int i = 1; i < 4; i++) { 
+            parts.add(new Ellipse2D.Double(startX, startY + i * moveSize, moveSize, moveSize)); 
         }
 
-        // Add KeyBindings to move the snake
+        
         addKeyBindings(upKey, leftKey, downKey, rightKey);
     }
 
-    // Keybindings for moving the snake
     private void addKeyBindings(int upKey, int leftKey, int downKey, int rightKey) {
         gameField.getInputMap().put(KeyStroke.getKeyStroke(upKey, 0), "moveUp" + (isPlayer1 ? "1" : "2"));
         gameField.getActionMap().put("moveUp" + (isPlayer1 ? "1" : "2"), new MoveAction(this, Direction.UP));
@@ -45,17 +50,13 @@ public class Snake {
 
         gameField.getInputMap().put(KeyStroke.getKeyStroke(rightKey, 0), "moveRight" + (isPlayer1 ? "1" : "2"));
         gameField.getActionMap().put("moveRight" + (isPlayer1 ? "1" : "2"), new MoveAction(this, Direction.RIGHT));
+
+        gameField.requestFocusInWindow(); 
     }
 
     public void changeDirection(Direction newDirection) {
         if (alive) {
-            // Log the direction change for the specific player
-            if (isPlayer1) {
-                System.out.println("Player 1 changing direction to: " + newDirection);
-            } else {
-                System.out.println("Player 2 changing direction to: " + newDirection);
-            }
-
+            System.out.println((isPlayer1 ? "Player 1" : "Player 2") + " changing direction to: " + newDirection);
             this.direction = newDirection;
         }
     }
@@ -70,45 +71,54 @@ public class Snake {
 
     public void update() {
         if (!alive) return;
-    
-        // Move the snake by updating its head position
+
+        
         double newX = parts.get(0).getX();
         double newY = parts.get(0).getY();
-    
+
+        
         switch (direction) {
             case UP -> newY -= moveSize;
             case DOWN -> newY += moveSize;
             case LEFT -> newX -= moveSize;
             case RIGHT -> newX += moveSize;
         }
-    
-        // Check for collisions with the walls
+
+        
         if (newX < 0 || newX >= GameField.PANEL_WIDTH || newY < 0 || newY >= GameField.PANEL_HEIGHT) {
+            System.out.println("Game Over: Snake hit the wall!");
             alive = false;
             return;
         }
-    
-        // Check for collisions with itself
-        for (int i = 1; i < parts.size(); i++) {
-            if (parts.get(i).getX() == newX && parts.get(i).getY() == newY) {
+
+        
+        for (int i = 0; i < parts.size(); i++) {
+            if (i > 0 && parts.get(i).getX() == newX && parts.get(i).getY() == newY) {
+                System.out.println("Game Over: Snake collided with itself!");
                 alive = false;
                 return;
             }
         }
-    
-        // Update the parts list (this moves the snake)
+
+        
         parts.add(0, new Ellipse2D.Double(newX, newY, moveSize, moveSize));
-    
-        // Check for apple collection
+
         Apple apple = gameField.getApple();
         if (apple.getShape().intersects(parts.get(0).getBounds2D())) {
-            scorePanel.increaseScore1();  // Update this based on the player
-            apple.reposition(); // Reposition apple if eaten
+            
+            if (isPlayer1) {
+                scorePanel.increaseScore1();
+            } else {
+                scorePanel.increaseScore2(); 
+            }
+            apple.reposition(); 
+            
         } else {
-            parts.remove(parts.size() - 1); // Remove the tail if no apple eaten
+            
+            parts.remove(parts.size() - 1);
         }
-    
-        // Update the GameField with the current snake parts
+
+        
         if (isPlayer1) {
             gameField.setSnakeParts1(parts);
         } else {
@@ -116,7 +126,6 @@ public class Snake {
         }
     }
 
-    // Inner MoveAction class for keybindings
     private class MoveAction extends AbstractAction {
         private Snake snake;
         private Direction direction;

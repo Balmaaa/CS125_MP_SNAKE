@@ -20,7 +20,6 @@ public class SnakeFrame extends JFrame {
     private void initComponents() {
         setLayout(new GridBagLayout());
         addKeyListener(new KeyboardHandler());
-
         scorePanel = new ScorePanel();
         add(scorePanel, new GBC(0, 8, 8, 1));
 
@@ -29,12 +28,12 @@ public class SnakeFrame extends JFrame {
     }
 
     private void initGame() {
-        // Initialize players with their respective keys
+        
         player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
         player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false);
         Runnable gameRunnable = new Game(gameField, player1, player2, this);
         gameThread = new Thread(gameRunnable);
-        gameField.requestFocusInWindow(); // Request focus for key input
+        gameField.requestFocusInWindow(); 
     }
 
     private void initFrame() {
@@ -46,9 +45,12 @@ public class SnakeFrame extends JFrame {
         setVisible(true);
     }
 
+    
     public void newGame() {
-        started = true;
-        gameThread.start();
+        if (!started) {
+            started = true;
+            gameThread.start(); 
+        }
     }
 
     public void gameOver() {
@@ -72,16 +74,20 @@ public class SnakeFrame extends JFrame {
 
     private void resetGame() {
         started = false;
+        
         player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
         player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false);
+        
         scorePanel.clear();
-        gameField.initDefaults();
+        gameField.initDefaults(); 
+        
         scorePanel.repaint();
         gameField.repaint();
+        
         Runnable r = new Game(gameField, player1, player2, this);
         gameThread = new Thread(r);
+        gameField.requestFocusInWindow();
     }
-
     private class KeyboardHandler extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -89,3 +95,4 @@ public class SnakeFrame extends JFrame {
         }
     }
 }
+
