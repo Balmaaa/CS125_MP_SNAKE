@@ -11,8 +11,9 @@ import javax.swing.JPanel;
 
 public class GameField extends JPanel {
 
-    public static final int PANEL_WIDTH = 400;
-    public static final int PANEL_HEIGHT = 400;
+    // Increased game field size to 600x600
+    public static final int PANEL_WIDTH = 600;
+    public static final int PANEL_HEIGHT = 600;
 
     private List<Ellipse2D.Double> snakeParts1;
     private List<Ellipse2D.Double> snakeParts2;
@@ -25,18 +26,18 @@ public class GameField extends JPanel {
     }
 
     public void initDefaults() {
-        apple = new Apple(100, 100); // Initialize the apple
+        apple = new Apple(300, 300); // Reposition the apple to a more central spot
         snakeParts1 = Collections.synchronizedList(new ArrayList<>());
         snakeParts2 = Collections.synchronizedList(new ArrayList<>());
 
-        // Initialize snake parts for player 1
-        snakeParts1.add(new Ellipse2D.Double(260, 260, 20, 20));
-        snakeParts1.add(new Ellipse2D.Double(260, 280, 20, 20));
-        snakeParts1.add(new Ellipse2D.Double(260, 300, 20, 20));
-        snakeParts1.add(new Ellipse2D.Double(260, 320, 20, 20));
+        // Initialize snake parts for player 1 (starting further from player 2)
+        snakeParts1.add(new Ellipse2D.Double(400, 300, 20, 20));  // Start player 1 snake at (400, 300)
+        snakeParts1.add(new Ellipse2D.Double(400, 320, 20, 20));
+        snakeParts1.add(new Ellipse2D.Double(400, 340, 20, 20));
+        snakeParts1.add(new Ellipse2D.Double(400, 360, 20, 20));
 
-        // Initialize snake parts for player 2
-        snakeParts2.add(new Ellipse2D.Double(100, 100, 20, 20));
+        // Initialize snake parts for player 2 (starting further from player 1)
+        snakeParts2.add(new Ellipse2D.Double(100, 100, 20, 20));  // Start player 2 snake at (100, 100)
         snakeParts2.add(new Ellipse2D.Double(100, 120, 20, 20));
         snakeParts2.add(new Ellipse2D.Double(100, 140, 20, 20));
         snakeParts2.add(new Ellipse2D.Double(100, 160, 20, 20));
@@ -44,10 +45,12 @@ public class GameField extends JPanel {
 
     public void setSnakeParts1(List<Ellipse2D.Double> snakeParts) {
         this.snakeParts1 = snakeParts;
+        repaint(); // Repaint to update the display after snake parts change
     }
 
     public void setSnakeParts2(List<Ellipse2D.Double> snakeParts) {
         this.snakeParts2 = snakeParts;
+        repaint(); // Repaint to update the display after snake parts change
     }
 
     public Apple getApple() {
@@ -87,3 +90,4 @@ public class GameField extends JPanel {
         g2.fill(snakeParts2.get(0));
     }
 }
+
