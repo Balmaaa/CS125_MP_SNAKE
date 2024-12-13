@@ -8,7 +8,7 @@ import javax.swing.KeyStroke;
 public class Snake {
     private List<Ellipse2D.Double> parts;
     private Direction direction;
-    private int moveSize = 20;
+    private int moveSize = 15;
     private GameField gameField;
     private ScorePanel scorePanel;
     private boolean alive = true;

@@ -52,10 +52,10 @@ public class GameField extends JPanel implements KeyListener {
         snake1Direction = 3;
 
         // Player 2 Snake
-        snakeParts2.add(new Ellipse2D.Double(100, 100, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(100, 120, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(100, 140, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(100, 160, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(150, 150, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(150, 120, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(150, 140, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(150, 160, 20, 20));
         snake2Direction = 3;
 
         // Player Scoreboard
@@ -71,10 +71,10 @@ public class GameField extends JPanel implements KeyListener {
 
         // Draw the grid with a subtle color
         g2.setColor(new Color(240, 240, 240, 50));
-        for (int i = 0; i < PANEL_WIDTH; i += 10) {
+        for (int i = 0; i < PANEL_WIDTH; i += 15) {
             g2.drawLine(i, 0, i, PANEL_HEIGHT);
         }
-        for (int i = 0; i < PANEL_HEIGHT; i += 10) {
+        for (int i = 0; i < PANEL_HEIGHT; i += 15) {
             g2.drawLine(0, i, PANEL_WIDTH, i);
         }
 
@@ -107,7 +107,7 @@ public class GameField extends JPanel implements KeyListener {
             moveSnake2();
             repaint();
             try {
-                Thread.sleep(100);
+                Thread.sleep(150);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -121,16 +121,16 @@ public class GameField extends JPanel implements KeyListener {
 
         switch (snake1Direction) {
             case 0: // Up
-                newY -= 10;
+                newY -= 15;
                 break;
             case 1: // Down
-                newY += 10;
+                newY += 15;
                 break;
             case 2: // Left
-                newX -= 10;
+                newX -= 15;
                 break;
             case 3: // Right
-                newX += 10;
+                newX += 15;
                 break;
         }
 
@@ -147,7 +147,7 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
-        if (apple.getShape().intersects(newX, newY, 10, 10)) {
+        if (apple.getShape().intersects(newX, newY, 15, 15)) {
             score1++;
             repositionApple();
         } else {
@@ -156,7 +156,7 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
-        snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 10, 10));
+        snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 15, 15));
     }
 
     private void moveSnake2() {
@@ -166,16 +166,16 @@ public class GameField extends JPanel implements KeyListener {
 
         switch (snake2Direction) {
             case 0: // Up
-                newY -= 10;
+                newY -= 15;
                 break;
             case 1: // Down
-                newY += 10;
+                newY += 15;
                 break;
             case 2: // Left
-                newX -= 10;
+                newX -= 15;
                 break;
             case 3: // Right
-                newX += 10;
+                newX += 15;
                 break;
         }
 
@@ -192,7 +192,7 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
-        if (apple.getShape().intersects(newX, newY, 10, 10)) {
+        if (apple.getShape().intersects(newX, newY, 15, 15)) {
             score2++;
             repositionApple();
         } else {
@@ -201,7 +201,7 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
-        snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 10, 10));
+        snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 15, 15));
     }
 
     private void repositionApple()
@@ -213,8 +213,8 @@ public class GameField extends JPanel implements KeyListener {
     do 
     {
         // Generate random positions within the panel, excluding the top 40px for the scoreboard
-        newX = rand.nextInt(PANEL_WIDTH / 10) * 10;
-        newY = rand.nextInt((PANEL_HEIGHT - 40) / 10) * 10 + 40; // Ensure Y is below the scoreboard (starting at Y=40)
+        newX = rand.nextInt(PANEL_WIDTH / 15) * 15;
+        newY = rand.nextInt((PANEL_HEIGHT - 40) / 15) * 15 + 40; // Ensure Y is below the scoreboard (starting at Y=40)
 
         validPosition = true;
 
