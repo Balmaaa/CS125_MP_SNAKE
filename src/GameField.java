@@ -204,32 +204,45 @@ public class GameField extends JPanel implements KeyListener {
         snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 10, 10));
     }
 
-    private synchronized void repositionApple() {
-        Random rand = new Random();
-        int newX, newY;
-        boolean validPosition;
+    private void repositionApple()
+{
+    Random rand = new Random();
+    int newX, newY;
+    boolean validPosition;
 
-        do {
-            newX = rand.nextInt(PANEL_WIDTH / 20) * 20;
-            newY = rand.nextInt(PANEL_HEIGHT / 20) * 20;
-            validPosition = true;
+    do 
+    {
+        // Generate random positions within the panel, excluding the top 40px for the scoreboard
+        newX = rand.nextInt(PANEL_WIDTH / 10) * 10;
+        newY = rand.nextInt((PANEL_HEIGHT - 40) / 10) * 10 + 40; // Ensure Y is below the scoreboard (starting at Y=40)
 
-            for (Ellipse2D.Double part : snakeParts1) {
-                if (part.getX() == newX && part.getY() == newY) {
-                    validPosition = false;
-                    break;
-                }
+        validPosition = true;
+
+        // Check if the apple position intersects with either snake
+        for (Ellipse2D.Double part : snakeParts1) 
+        {
+            if (part.getX() == newX && part.getY() == newY) 
+            {
+                validPosition = false;
+                break;
             }
-            for (Ellipse2D.Double part : snakeParts2) {
-                if (part.getX() == newX && part.getY() == newY) {
-                    validPosition = false;
-                    break;
-                }
-            }
-        } while (!validPosition);
+        }
 
-        apple.setPosition(newX, newY);
-    }
+        for (Ellipse2D.Double part : snakeParts2) 
+        {
+            if (part.getX() == newX && part.getY() == newY) 
+            {
+                validPosition = false;
+                break;
+            }
+        }
+
+    } 
+    while (!validPosition); // Continue generating until a valid position is found
+
+    apple.setPosition(newX, newY);
+}
+
 
     public void setRunning(boolean running) {
         this.running = running;
