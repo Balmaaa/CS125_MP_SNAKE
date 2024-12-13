@@ -13,17 +13,17 @@ public class ScorePanel extends JPanel {
         setBackground(Color.BLACK);
     }
 
-    public void increaseScore1() {
+    public synchronized void increaseScore1() {
         score1++;
         repaint();
     }
 
-    public void increaseScore2() {
+    public synchronized void increaseScore2() {
         score2++;
         repaint();
     }
 
-    public void clear() {
+    public synchronized void clear() {
         score1 = 0;
         score2 = 0;
         repaint();
