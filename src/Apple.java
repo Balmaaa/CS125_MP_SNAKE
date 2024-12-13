@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Apple 
 {
-    public static final int SIZE = 20; // Apple Size
+    public static final int SIZE = 10; // Apple Size
     private Ellipse2D.Double shape;
     private Random random;
 

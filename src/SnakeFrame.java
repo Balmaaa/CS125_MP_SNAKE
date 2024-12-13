@@ -83,31 +83,33 @@ public class SnakeFrame extends JFrame
 
     private void resetGame() {
         if (gameThread != null && gameThread.isAlive()) {
-            gameThread.interrupt(); 
+            gameThread.interrupt();  // Interrupt the previous game thread
         }
     
+        // Reset game state
         started = false;
     
         // Reset both players' snakes
-        player1.reset(); 
-        player2.reset(); 
+        player1.reset();
+        player2.reset();
     
-        // Reset scores and game field
-        scorePanel.clear();
+        // Reset the game field and other components
         gameField.initDefaults();
+        scorePanel.clear();  // Reset the scores
     
-        // Restart the game
-        scorePanel.repaint();
-        gameField.repaint();
-    
+        // Start the game
         Runnable r = new Game(gameField, player1, player2, this);
-        gameThread = new Thread(r); 
+        gameThread = new Thread(r);  // Create a new game thread
     
-        gameThread.start();
+        gameThread.start();  // Start the new game
     
+        // Focus on the game field so it can capture key events
         gameField.requestFocusInWindow();
-    }    
-
+    
+        // Repaint the game components (game field, score panel)
+        gameField.repaint();
+        scorePanel.repaint();
+    }
     private class KeyboardHandler extends KeyAdapter 
     {
         @Override

@@ -62,17 +62,17 @@ public class GameField extends JPanel implements KeyListener {
         snakeParts2 = Collections.synchronizedList(new ArrayList<>());
 
         // Player 1 Snake
-        snakeParts1.add(new Ellipse2D.Double(400, 300, 20, 20));
-        snakeParts1.add(new Ellipse2D.Double(400, 320, 20, 20));
-        snakeParts1.add(new Ellipse2D.Double(400, 340, 20, 20));
-        snakeParts1.add(new Ellipse2D.Double(400, 360, 20, 20));
+        snakeParts1.add(new Ellipse2D.Double(400, 300, 10, 10));
+        snakeParts1.add(new Ellipse2D.Double(400, 310, 10, 10));
+        snakeParts1.add(new Ellipse2D.Double(400, 340, 10, 10));
+        snakeParts1.add(new Ellipse2D.Double(400, 360, 10, 10));
         snake1Direction = 3;
 
         // Player 21 Snake
-        snakeParts2.add(new Ellipse2D.Double(100, 100, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(100, 120, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(100, 140, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(100, 160, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(100, 100, 10, 10));
+        snakeParts2.add(new Ellipse2D.Double(100, 110, 10, 10));
+        snakeParts2.add(new Ellipse2D.Double(100, 140, 10, 10));
+        snakeParts2.add(new Ellipse2D.Double(100, 160, 10, 10));
         snake2Direction = 3;
 
         // Player Scoreboard
@@ -106,7 +106,7 @@ public class GameField extends JPanel implements KeyListener {
 
         // Scoreboard Design
         g2.setPaint(Color.WHITE);
-        g2.drawString("Player 1 Score: " + score1, 10, 20);
+        g2.drawString("Player 1 Score: " + score1, 10, 10);
         g2.drawString("Player 2 Score: " + score2, 10, 40);
     }
 
@@ -137,16 +137,16 @@ public class GameField extends JPanel implements KeyListener {
         switch (snake1Direction)
         {
             case 0: // Up
-                newY -= 20;
+                newY -= 10;
                 break;
             case 1: // Down
-                newY += 20;
+                newY += 10;
                 break;
             case 2: // Left
-                newX -= 20;
+                newX -= 10;
                 break;
             case 3: // Right
-                newX += 20;
+                newX += 10;
                 break;
         }
 
@@ -166,7 +166,7 @@ public class GameField extends JPanel implements KeyListener {
         }
 
 
-        if (apple.getShape().intersects(newX, newY, 20, 20))
+        if (apple.getShape().intersects(newX, newY, 10, 10))
         {
             score1++;
             repositionApple();
@@ -180,7 +180,7 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
-        snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 20, 20));
+        snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 10, 10));
     }
 
     private void moveSnake2()
@@ -192,16 +192,16 @@ public class GameField extends JPanel implements KeyListener {
         switch (snake2Direction)
         {
             case 0: // Up
-                newY -= 20;
+                newY -= 10;
                 break;
             case 1: // Down
-                newY += 20;
+                newY += 10;
                 break;
             case 2: // Left
-                newX -= 20;
+                newX -= 10;
                 break;
             case 3: // Right
-                newX += 20;
+                newX += 10;
                 break;
         }
 
@@ -220,7 +220,7 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
-        if (apple.getShape().intersects(newX, newY, 20, 20))
+        if (apple.getShape().intersects(newX, newY, 10, 10))
         {
             score2++;
             repositionApple();
@@ -232,7 +232,7 @@ public class GameField extends JPanel implements KeyListener {
                 snakeParts2.remove(snakeParts2.size() - 1);
             }
         }
-        snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 20, 20));
+        snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 10, 10));
     }
 
     private void repositionApple()
@@ -243,8 +243,8 @@ public class GameField extends JPanel implements KeyListener {
 
         do 
         {
-            newX = rand.nextInt(PANEL_WIDTH / 20) * 20;
-            newY = rand.nextInt(PANEL_HEIGHT / 20) * 20;
+            newX = rand.nextInt(PANEL_WIDTH / 10) * 10;
+            newY = rand.nextInt(PANEL_HEIGHT / 10) * 10;
             validPosition = true;
 
             for (Ellipse2D.Double part : snakeParts1) 
