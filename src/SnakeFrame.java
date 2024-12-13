@@ -2,8 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class SnakeFrame extends JFrame {
-
+public class SnakeFrame extends JFrame 
+{
     private ScorePanel scorePanel;
     private GameField gameField;
     private Thread gameThread;
@@ -11,13 +11,15 @@ public class SnakeFrame extends JFrame {
     private Snake player2;
     private boolean started = false;
 
-    public SnakeFrame() {
+    public SnakeFrame() 
+    {
         initComponents();
         initGame();
         initFrame();
     }
 
-    private void initComponents() {
+    private void initComponents() 
+    {
         setLayout(new GridBagLayout());
         addKeyListener(new KeyboardHandler());
         scorePanel = new ScorePanel();
@@ -27,7 +29,8 @@ public class SnakeFrame extends JFrame {
         add(gameField, new GBC(0, 0, 8, 8));
     }
 
-    private void initGame() {
+    private void initGame() 
+    {
         
         player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
         player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false);
@@ -36,7 +39,8 @@ public class SnakeFrame extends JFrame {
         gameField.requestFocusInWindow(); 
     }
 
-    private void initFrame() {
+    private void initFrame() 
+    {
         pack();
         setTitle("Snake Multiplayer");
         setLocationRelativeTo(null);
@@ -46,19 +50,23 @@ public class SnakeFrame extends JFrame {
     }
 
     
-    public void newGame() {
-        if (!started) {
+    public void newGame() 
+    {
+        if (!started) 
+        {
             started = true;
             gameThread.start(); 
         }
     }
 
-    public void gameOver() {
+    public void gameOver() 
+    {
         int returnValue = JOptionPane.showConfirmDialog(this,
                 "Do you want to start a new game?", "GAME OVER!", JOptionPane
                         .OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
-        switch (returnValue) {
+        switch (returnValue) 
+        {
             case JOptionPane.OK_OPTION:
                 resetGame();
                 break;
@@ -72,7 +80,8 @@ public class SnakeFrame extends JFrame {
         }
     }
 
-    private void resetGame() {
+    private void resetGame()
+    {
         started = false;
         
         player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
@@ -88,9 +97,12 @@ public class SnakeFrame extends JFrame {
         gameThread = new Thread(r);
         gameField.requestFocusInWindow();
     }
-    private class KeyboardHandler extends KeyAdapter {
+
+    private class KeyboardHandler extends KeyAdapter 
+    {
         @Override
-        public void keyPressed(KeyEvent e) {
+        public void keyPressed(KeyEvent e) 
+        {
             if (!started) newGame();
         }
     }
