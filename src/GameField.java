@@ -233,31 +233,31 @@ public class GameField extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
-                if (snake1Direction != 1) snake1Direction = 0; // Up
+                if (snake2Direction != 1) snake2Direction = 0; // Up
                 break;
             case KeyEvent.VK_S:
-                if (snake1Direction != 0) snake1Direction = 1; // Down
+                if (snake2Direction != 0) snake2Direction = 1; // Down
                 break;
             case KeyEvent.VK_A:
-                if (snake1Direction != 3) snake1Direction = 2; // Left
+                if (snake2Direction != 3) snake2Direction = 2; // Left
                 break;
             case KeyEvent.VK_D:
-                if (snake1Direction != 2) snake1Direction = 3; // Right
+                if (snake2Direction != 2) snake2Direction = 3; // Right
                 break;
         }
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                if (snake2Direction != 1) snake2Direction = 0; // Up
+                if (snake1Direction != 1) snake1Direction = 0; // Up
                 break;
             case KeyEvent.VK_DOWN:
-                if (snake2Direction != 0) snake2Direction = 1; // Down
+                if (snake1Direction != 0) snake1Direction = 1; // Down
                 break;
             case KeyEvent.VK_LEFT:
-                if ( snake2Direction != 3) snake2Direction = 2; // Left
+                if ( snake1Direction != 3) snake1Direction = 2; // Left
                 break;
             case KeyEvent.VK_RIGHT:
-                if (snake2Direction != 2) snake2Direction = 3; // Right
+                if (snake1Direction != 2) snake1Direction = 3; // Right
                 break;
         }
     }
