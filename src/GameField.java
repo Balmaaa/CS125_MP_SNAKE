@@ -119,112 +119,96 @@ public void paintComponent(Graphics g) {
         }
     }
 
-    private void moveSnake1() 
-    {
+    private void moveSnake1() {
         Ellipse2D.Double head = snakeParts1.get(0);
         double newX = head.getX();
         double newY = head.getY();
-
-        switch (snake1Direction)
-        {
+    
+        switch (snake1Direction) {
             case 0: // Up
-                newY -= 20;
+                newY -= 10;
                 break;
             case 1: // Down
-                newY += 20;
+                newY += 10;
                 break;
             case 2: // Left
-                newX -=  20;
+                newX -= 10;
                 break;
             case 3: // Right
-                newX += 20;
+                newX += 10;
                 break;
         }
-
-        if (newX < 0 || newX >= PANEL_WIDTH || newY < 0 || newY >= PANEL_HEIGHT)
-        {
+    
+        // Prevent the snake from moving into the scoreboard area (top 50 pixels)
+        if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) {
             handleGameOver(true);
             return;
         }
-
-        for (int i = 1; i < snakeParts1.size(); i++)
-        {
-            if (snakeParts1.get(i).getX() == newX && snakeParts1.get(i).getY() == newY)
-            {
+    
+        for (int i = 1; i < snakeParts1.size(); i++) {
+            if (snakeParts1.get(i).getX() == newX && snakeParts1.get(i).getY() == newY) {
                 handleGameOver(true);
                 return;
             }
         }
-
-
-        if (apple.getShape().intersects(newX, newY, 10, 10))
-        {
+    
+        if (apple.getShape().intersects(newX, newY, 10, 10)) {
             score1++;
             repositionApple();
-        } 
-        else
-        {
-
-            if (snakeParts1.size() > 5)
-            {
+        } else {
+            if (snakeParts1.size() > 5) {
                 snakeParts1.remove(snakeParts1.size() - 1);
             }
         }
-
+    
         snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 10, 10));
     }
-
-    private void moveSnake2()
-    {
+    
+    private void moveSnake2() {
         Ellipse2D.Double head = snakeParts2.get(0);
         double newX = head.getX();
         double newY = head.getY();
-
-        switch (snake2Direction)
-        {
+    
+        switch (snake2Direction) {
             case 0: // Up
-                newY -= 20;
+                newY -= 10;
                 break;
             case 1: // Down
-                newY += 20;
+                newY += 10;
                 break;
             case 2: // Left
-                newX -= 20;
+                newX -= 10;
                 break;
             case 3: // Right
-                newX += 20;
+                newX += 10;
                 break;
         }
-
-        if (newX < 0 || newX >= PANEL_WIDTH || newY < 0 || newY >= PANEL_HEIGHT)
-        {
+    
+        // Prevent the snake from moving into the scoreboard area (top 50 pixels)
+        if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) {
             handleGameOver(false);
             return;
         }
-
-        for (int i = 1; i < snakeParts2.size(); i++)
-        {
-            if (snakeParts2.get(i).getX() == newX && snakeParts2.get(i).getY() == newY)
-            {
+    
+        for (int i = 1; i < snakeParts2.size(); i++) {
+            if (snakeParts2.get(i).getX() == newX && snakeParts2.get(i).getY() == newY) {
                 handleGameOver(false);
                 return;
             }
         }
-
-        if (apple.getShape().intersects(newX, newY, 10, 10))
-        {
+    
+        if (apple.getShape().intersects(newX, newY, 10, 10)) {
             score2++;
             repositionApple();
-        } 
-        else
-        {
-            if (snakeParts2.size() > 5)
-            {
+        } else {
+            if (snakeParts2.size() > 5) {
                 snakeParts2.remove(snakeParts2.size() - 1);
             }
         }
+    
         snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 10, 10));
     }
+    
 
     private synchronized void repositionApple()
     {
