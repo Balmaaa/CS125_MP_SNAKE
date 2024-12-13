@@ -49,14 +49,14 @@ public class GameField extends JPanel implements KeyListener {
         snakeParts1.add(new Ellipse2D.Double(400, 320, 20, 20));
         snakeParts1.add(new Ellipse2D.Double(400, 340, 20, 20));
         snakeParts1.add(new Ellipse2D.Double(400, 360, 20, 20));
-        snake1Direction = 1;
+        snake1Direction = 3;
 
         // Player 21 Snake
-        snakeParts2.add(new Ellipse2D.Double(400, 100, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(400, 120, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(400, 140, 20, 20));
-        snakeParts2.add(new Ellipse2D.Double(400, 160, 20, 20));
-        snake2Direction = 1;
+        snakeParts2.add(new Ellipse2D.Double(100, 100, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(100, 120, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(100, 140, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(100, 160, 20, 20));
+        snake2Direction = 3;
 
         // Player Scoreboard
         score1 = 0;
@@ -102,7 +102,7 @@ public class GameField extends JPanel implements KeyListener {
             repaint();
             try 
             {
-                Thread.sleep(90);
+                Thread.sleep(100);
             } 
             catch (InterruptedException e)
             {

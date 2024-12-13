@@ -22,7 +22,7 @@ public class Game implements Runnable
             gameField.repaint();
             try
             {
-                Thread.sleep(90); // Game Speed
+                Thread.sleep(100); // Game Speed
             } 
             catch (InterruptedException e) 
             {
