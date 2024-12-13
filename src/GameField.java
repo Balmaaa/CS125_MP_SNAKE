@@ -13,8 +13,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class GameField extends JPanel implements KeyListener 
-{
+public class GameField extends JPanel implements KeyListener {
 
     public static final int PANEL_WIDTH = 600;
     public static final int PANEL_HEIGHT = 600;
@@ -26,11 +25,11 @@ public class GameField extends JPanel implements KeyListener
     private boolean running;
     private int score1;
     private int score2;
-    private SnakeFrame snakeFrame;
+    private SnakeFrame snakeFrame; // Reference to the SnakeFrame
 
-    public GameField(SnakeFrame snakeFrame) 
-    {
-        this.snakeFrame = snakeFrame;
+    // Constructor that accepts a SnakeFrame instance
+    public GameField(SnakeFrame snakeFrame) {
+        this.snakeFrame = snakeFrame; // Store the reference
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setBackground(Color.BLACK);
         initDefaults();
@@ -40,8 +39,7 @@ public class GameField extends JPanel implements KeyListener
         new Thread(this::gameLoop).start();
     }
 
-    public synchronized void initDefaults() 
-    {
+    public synchronized void initDefaults() {
         apple = new Apple(300, 300);
         snakeParts1 = Collections.synchronizedList(new ArrayList<>());
         snakeParts2 = Collections.synchronizedList(new ArrayList<>());
@@ -66,79 +64,67 @@ public class GameField extends JPanel implements KeyListener
     }
 
     @Override
-    public void paintComponent(Graphics g) 
-    {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(new Color(240, 240, 240, 50));
-        for (int i = 0; i < PANEL_WIDTH; i += 15) 
-        {
-            g2.drawLine(i, 0, i, PANEL_HEIGHT);
-        }
-        for (int i = 0; i < PANEL_HEIGHT; i += 15) 
-        {
-            g2.drawLine(0, i, PANEL_WIDTH, i);
-        }
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw a solid background for the scoreboard area (top 50px)
-        g2.setColor(new Color(50, 50, 50));
-        g2.fillRect(0, 0, PANEL_WIDTH, 60);
-
-        // Draw Apple
-        g2.setPaint(Color.RED);
-        g2.fill(apple.getShape());
-
-        // Draw Snake 1
-        g2.setPaint(new Color(34, 136, 215));
-        for (Ellipse2D e : snakeParts1) {
-            g2.fill(e);
-        }
-
-        // Draw Snake 2
-        g2.setPaint(new Color(255, 215, 0));
-        for (Ellipse2D e : snakeParts2) {
-            g2.fill(e);
-        }
-
-        // Draw Scoreboard
-        g2.setPaint(Color.WHITE);
-        g2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-        g2.drawString("Player 1: " + score1, 30, 40);
-        g2.drawString("Player 2: " + score2, PANEL_WIDTH - 180, 40);
+    // Draw the grid with a subtle color
+    g2.setColor(new Color(240, 240, 240, 50));
+    for (int i = 0; i < PANEL_WIDTH; i += 15) {
+        g2.drawLine(i, 0, i, PANEL_HEIGHT);
+    }
+    for (int i = 0; i < PANEL_HEIGHT; i += 15) {
+        g2.drawLine(0, i, PANEL_WIDTH, i);
     }
 
-    public Apple getApple() { return apple; }
+    // Draw a solid background for the scoreboard area (top 50px)
+    g2.setColor(new Color(50, 50, 50));  // Dark gray for the scoreboard
+    g2.fillRect(0, 0, PANEL_WIDTH, 60);  // This covers the top 50px of the panel
 
-    public void setSnakeParts1(List<Ellipse2D.Double> parts) { this.snakeParts1 = parts; }
+    // Draw Apple
+    g2.setPaint(Color.RED);
+    g2.fill(apple.getShape());
 
-    public void setSnakeParts2(List<Ellipse2D.Double> parts) { this.snakeParts2 = parts; }
+    // Draw Snake 1
+    g2.setPaint(new Color(34, 136, 215));
+    for (Ellipse2D e : snakeParts1) {
+        g2.fill(e);
+    }
 
-    private void gameLoop() 
-    {
+    // Draw Snake 2
+    g2.setPaint(new Color(255, 215, 0));
+    for (Ellipse2D e : snakeParts2) {
+        g2.fill(e);
+    }
+
+    // Draw Scoreboard
+    g2.setPaint(Color.WHITE);
+    g2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+    g2.drawString("Player 1: " + score1, 30, 40);  // Position it inside the solid scoreboard area
+    g2.drawString("Player 2: " + score2, PANEL_WIDTH - 180, 40);  // Position it inside the solid scoreboard area
+}
+
+
+    private void gameLoop() {
         while (running) {
             moveSnake1();
             moveSnake2();
             repaint();
-            try 
-            {
+            try {
                 Thread.sleep(150);
-            } 
-            catch (InterruptedException e) 
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void moveSnake1() 
-    {
+    private void moveSnake1() {
         Ellipse2D.Double head = snakeParts1.get(0);
         double newX = head.getX();
         double newY = head.getY();
 
-        switch (snake1Direction) 
-        {
+        switch (snake1Direction) {
             case 0: // Up
                 newY -= 15;
                 break;
@@ -153,30 +139,24 @@ public class GameField extends JPanel implements KeyListener
                 break;
         }
 
-        if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) 
-        {
+        // Prevent the snake from moving into the scoreboard area (top 50 pixels)
+        if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) {
             handleGameOver(true);
             return;
         }
 
-        for (int i = 1; i < snakeParts1.size(); i++) 
-        {
-            if (snakeParts1.get(i).getX() == newX && snakeParts1.get(i).getY() == newY) 
-            {
+        for (int i = 1; i < snakeParts1.size(); i++) {
+            if (snakeParts1.get(i).getX() == newX && snakeParts1.get(i).getY() == newY) {
                 handleGameOver(true);
                 return;
             }
         }
 
-        if (apple.getShape().intersects(newX, newY, 15, 15)) 
-        {
+        if (apple.getShape().intersects(newX, newY, 15, 15)) {
             score1++;
             repositionApple();
-        } 
-        else 
-        {
-            if (snakeParts1.size() > 5) 
-            {
+        } else {
+            if (snakeParts1.size() > 5) {
                 snakeParts1.remove(snakeParts1.size() - 1);
             }
         }
@@ -184,14 +164,12 @@ public class GameField extends JPanel implements KeyListener
         snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 15, 15));
     }
 
-    private void moveSnake2() 
-    {
+    private void moveSnake2() {
         Ellipse2D.Double head = snakeParts2.get(0);
         double newX = head.getX();
         double newY = head.getY();
 
-        switch (snake2Direction) 
-        {
+        switch (snake2Direction) {
             case 0: // Up
                 newY -= 15;
                 break;
@@ -206,30 +184,24 @@ public class GameField extends JPanel implements KeyListener
                 break;
         }
 
-        if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) 
-        {
+        // Prevent the snake from moving into the scoreboard area (top 50 pixels)
+        if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) {
             handleGameOver(false);
             return;
         }
 
-        for (int i = 1; i < snakeParts2.size(); i++) 
-        {
-            if (snakeParts2.get(i).getX() == newX && snakeParts2.get(i).getY() == newY) 
-            {
+        for (int i = 1; i < snakeParts2.size(); i++) {
+            if (snakeParts2.get(i).getX() == newX && snakeParts2.get(i).getY() == newY) {
                 handleGameOver(false);
                 return;
             }
         }
 
-        if (apple.getShape().intersects(newX, newY, 15, 15)) 
-        {
+        if (apple.getShape().intersects(newX, newY, 15, 15)) {
             score2++;
             repositionApple();
-        } 
-        else 
-        {
-            if (snakeParts2.size() > 5) 
-            {
+        } else {
+            if (snakeParts2.size() > 5) {
                 snakeParts2.remove(snakeParts2.size() - 1);
             }
         }
@@ -237,56 +209,56 @@ public class GameField extends JPanel implements KeyListener
         snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 15, 15));
     }
 
-    private void repositionApple() 
-    {
-        Random rand = new Random();
-        int newX, newY;
-        boolean validPosition;
+    private void repositionApple()
+{
+    Random rand = new Random();
+    int newX, newY;
+    boolean validPosition;
 
-        do 
+    do 
+    {
+        // Generate random positions within the panel, excluding the top 40px for the scoreboard
+        newX = rand.nextInt(PANEL_WIDTH / 15) * 15;
+        newY = rand.nextInt((PANEL_HEIGHT - 60) / 15) * 15 + 60; // Ensure Y is below the scoreboard (starting at Y=40)
+
+        validPosition = true;
+
+        // Check if the apple position intersects with either snake
+        for (Ellipse2D.Double part : snakeParts1) 
         {
-            newX = rand.nextInt(PANEL_WIDTH / 15) * 15;
-            newY = rand.nextInt((PANEL_HEIGHT - 60) / 15) * 15 + 60;
-
-            validPosition = true;
-
-            for (Ellipse2D.Double part : snakeParts1)
-             {
-                if (part.getX() == newX && part.getY() == newY) 
-                {
-                    validPosition = false;
-                    break;
-                }
+            if (part.getX() == newX && part.getY() == newY) 
+            {
+                validPosition = false;
+                break;
             }
+        }
 
-            for (Ellipse2D.Double part : snakeParts2)
-             {
-                if (part.getX() == newX && part.getY() == newY) 
-                {
-                    validPosition = false;
-                    break;
-                }
+        for (Ellipse2D.Double part : snakeParts2) 
+        {
+            if (part.getX() == newX && part.getY() == newY) 
+            {
+                validPosition = false;
+                break;
             }
+        }
 
-        } while (!validPosition);
+    } 
+    while (!validPosition); // Continue generating until a valid position is found
 
-        apple.setPosition(newX, newY);
-    }
+    apple.setPosition(newX, newY);
+}
 
-    public void setRunning(boolean running) 
-    {
+
+    public void setRunning(boolean running) {
         this.running = running;
-        if (running) 
-        {
-            new Thread(this::gameLoop).start();
+        if (running) {
+            new Thread(this::gameLoop).start(); // Start the game loop if running is true
         }
     }
 
     @Override
-    public void keyPressed(KeyEvent e) 
-    {
-        switch (e.getKeyCode()) 
-        {
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
                 if (snake2Direction != 1) snake2Direction = 0; // Up
                 break;
@@ -309,7 +281,7 @@ public class GameField extends JPanel implements KeyListener
                 if (snake1Direction != 0) snake1Direction = 1; // Down
                 break;
             case KeyEvent.VK_LEFT:
-                if (snake1Direction != 3) snake1Direction = 2; // Left
+                if ( snake1Direction != 3) snake1Direction = 2; // Left
                 break;
             case KeyEvent.VK_RIGHT:
                 if (snake1Direction != 2) snake1Direction = 3; // Right
@@ -317,19 +289,15 @@ public class GameField extends JPanel implements KeyListener
         }
     }
 
-    public synchronized void handleGameOver(boolean isPlayer1) 
-    {
-        running = false;
+    public synchronized void handleGameOver(boolean isPlayer1) {
+        running = false; // Stop the game loop
         String message = (isPlayer1 ? "Player 1" : "Player 2") + " has lost! Would you like to restart the game?";
         int response = JOptionPane.showConfirmDialog(snakeFrame, message, "Game Over", JOptionPane.YES_NO_OPTION);
 
-        if (response == JOptionPane.YES_OPTION) 
-        {
-            snakeFrame.resetGame(); // Restart Game
-        } 
-        else 
-        {
-            System.exit(0); // Exit Game
+        if (response == JOptionPane.YES_OPTION) {
+            snakeFrame.resetGame(); // Call the reset method in SnakeFrame to restart the game
+        } else {
+            System.exit(0); // Exit the game
         }
     }
 
