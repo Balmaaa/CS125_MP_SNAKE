@@ -81,23 +81,32 @@ public class SnakeFrame extends JFrame
         }
     }
 
-    private void resetGame()
-    {
+    private void resetGame() {
+        if (gameThread != null && gameThread.isAlive()) {
+            gameThread.interrupt(); 
+        }
+    
         started = false;
-        
-        player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
-        player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false);
-        
+    
+        // Reset both players' snakes
+        player1.reset(); 
+        player2.reset(); 
+    
+        // Reset scores and game field
         scorePanel.clear();
-        gameField.initDefaults(); 
-        
+        gameField.initDefaults();
+    
+        // Restart the game
         scorePanel.repaint();
         gameField.repaint();
-        
+    
         Runnable r = new Game(gameField, player1, player2, this);
-        gameThread = new Thread(r);
+        gameThread = new Thread(r); 
+    
+        gameThread.start();
+    
         gameField.requestFocusInWindow();
-    }
+    }    
 
     private class KeyboardHandler extends KeyAdapter 
     {

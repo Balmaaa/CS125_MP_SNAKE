@@ -42,6 +42,19 @@ public class GameField extends JPanel implements KeyListener {
         new Thread(this::gameLoop).start();
     }
 
+    public Apple getApple() {
+        return this.apple; 
+    }
+    public void setSnakeParts1(List<Ellipse2D.Double> snakeParts1) {
+        this.snakeParts1 = snakeParts1; 
+    }
+    public void setSnakeParts2(List<Ellipse2D.Double> snakeParts2) {
+        this.snakeParts2 = snakeParts2; 
+    }
+
+    
+    
+
     public void initDefaults()
     {
         apple = new Apple(300, 300);

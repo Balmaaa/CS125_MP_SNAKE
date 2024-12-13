@@ -120,7 +120,7 @@ public class Snake {
             {
                 scorePanel.increaseScore2(); 
             }
-            apple.reposition(); 
+            apple.relocate(); 
         } 
         else
         {
@@ -134,6 +134,22 @@ public class Snake {
             gameField.setSnakeParts2(parts);
         }
     }
+
+    public void reset() {
+        parts.clear(); // Clear any existing parts
+        double startX = 150 + (isPlayer1 ? 160 : 0);
+        double startY = 150;
+    
+        // Re-add initial parts
+        parts.add(new Ellipse2D.Double(startX, startY, moveSize, moveSize));
+        for (int i = 1; i < 4; i++) {
+            parts.add(new Ellipse2D.Double(startX, startY + i * moveSize, moveSize, moveSize));
+        }
+    
+        // Reset direction to initial state
+        direction = Direction.UP;
+    }
+    
 
     private class MoveAction extends AbstractAction
     {
