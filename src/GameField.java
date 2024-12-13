@@ -69,6 +69,15 @@ public class GameField extends JPanel implements KeyListener {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        // Draw the grid with a subtle color
+        g2.setColor(new Color(240, 240, 240, 50));
+        for (int i = 0; i < PANEL_WIDTH; i += 10) {
+            g2.drawLine(i, 0, i, PANEL_HEIGHT);
+        }
+        for (int i = 0; i < PANEL_HEIGHT; i += 10) {
+            g2.drawLine(0, i, PANEL_WIDTH, i);
+        }
+
         // Draw Apple
         g2.setPaint(Color.RED);
         g2.fill(apple.getShape());
