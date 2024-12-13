@@ -81,34 +81,45 @@ public class GameField extends JPanel implements KeyListener {
     }
 
     @Override
-    public void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Snake 1 Design
-        g2.setPaint(Color.RED);
-        g2.fill(apple.getShape());
+    // Snake 1 Design
+    g2.setPaint(Color.RED);
+    g2.fill(apple.getShape());
 
-        g2.setPaint(new Color(34, 136, 215));
-        for (Ellipse2D e : snakeParts1)
-        {
-            g2.fill(e);
-        }
-
-        // Snake 2 Design
-        g2.setPaint(new Color(255, 215, 0));
-        for (Ellipse2D e : snakeParts2)
-        {
-            g2.fill(e);
-        }
-
-        // Scoreboard Design
-        g2.setPaint(Color.WHITE);
-        g2.drawString("Player 1 Score: " + score1, 10, 10);
-        g2.drawString("Player 2 Score: " + score2, 10, 40);
+    g2.setPaint(new Color(34, 136, 215));
+    for (Ellipse2D e : snakeParts1) {
+        g2.fill(e);
     }
+
+    // Snake 2 Design
+    g2.setPaint(new Color(255, 215, 0));
+    for (Ellipse2D e : snakeParts2) {
+        g2.fill(e);
+    }
+
+    // Scoreboard Design
+    g2.setPaint(Color.WHITE);
+
+    // Set a custom font for the score display
+    g2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+
+    // Draw the background boxes for the scores
+    g2.setColor(new Color(0, 0, 0, 150));  // semi-transparent black
+    int scoreBoxWidth = 200;
+    int scoreBoxHeight = 50;
+    g2.fillRoundRect(10, 10, scoreBoxWidth, scoreBoxHeight, 20, 20);  // Player 1 box
+    g2.fillRoundRect(PANEL_WIDTH - 10 - scoreBoxWidth, 10, scoreBoxWidth, scoreBoxHeight, 20, 20);  // Player 2 box
+
+    // Draw the text on top of the boxes
+    g2.setColor(Color.WHITE);  // Text color
+    g2.drawString("Player 1: " + score1, 30, 40);  // Player 1 score
+    g2.drawString("Player 2: " + score2, PANEL_WIDTH - 180, 40);  // Player 2 score
+}
+
 
     private void gameLoop() 
     {
