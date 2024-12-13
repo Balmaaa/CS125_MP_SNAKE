@@ -64,42 +64,47 @@ public class GameField extends JPanel implements KeyListener {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw the grid with a subtle color
-        g2.setColor(new Color(240, 240, 240, 50));
-        for (int i = 0; i < PANEL_WIDTH; i += 15) {
-            g2.drawLine(i, 0, i, PANEL_HEIGHT);
-        }
-        for (int i = 0; i < PANEL_HEIGHT; i += 15) {
-            g2.drawLine(0, i, PANEL_WIDTH, i);
-        }
-
-        // Draw Apple
-        g2.setPaint(Color.RED);
-        g2.fill(apple.getShape());
-
-        // Draw Snake 1
-        g2.setPaint(new Color(34, 136, 215));
-        for (Ellipse2D e : snakeParts1) {
-            g2.fill(e);
-        }
-
-        // Draw Snake 2
-        g2.setPaint(new Color(255, 215, 0));
-        for (Ellipse2D e : snakeParts2) {
-            g2.fill(e);
-        }
-
-        // Draw Scoreboard
-        g2.setPaint(Color.WHITE);
-        g2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-        g2.drawString("Player 1: " + score1, 30, 40);
-        g2.drawString("Player 2: " + score2, PANEL_WIDTH - 180, 40);
+    // Draw the grid with a subtle color
+    g2.setColor(new Color(240, 240, 240, 50));
+    for (int i = 0; i < PANEL_WIDTH; i += 15) {
+        g2.drawLine(i, 0, i, PANEL_HEIGHT);
     }
+    for (int i = 0; i < PANEL_HEIGHT; i += 15) {
+        g2.drawLine(0, i, PANEL_WIDTH, i);
+    }
+
+    // Draw a solid background for the scoreboard area (top 50px)
+    g2.setColor(new Color(50, 50, 50));  // Dark gray for the scoreboard
+    g2.fillRect(0, 0, PANEL_WIDTH, 60);  // This covers the top 50px of the panel
+
+    // Draw Apple
+    g2.setPaint(Color.RED);
+    g2.fill(apple.getShape());
+
+    // Draw Snake 1
+    g2.setPaint(new Color(34, 136, 215));
+    for (Ellipse2D e : snakeParts1) {
+        g2.fill(e);
+    }
+
+    // Draw Snake 2
+    g2.setPaint(new Color(255, 215, 0));
+    for (Ellipse2D e : snakeParts2) {
+        g2.fill(e);
+    }
+
+    // Draw Scoreboard
+    g2.setPaint(Color.WHITE);
+    g2.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+    g2.drawString("Player 1: " + score1, 30, 40);  // Position it inside the solid scoreboard area
+    g2.drawString("Player 2: " + score2, PANEL_WIDTH - 180, 40);  // Position it inside the solid scoreboard area
+}
+
 
     private void gameLoop() {
         while (running) {
