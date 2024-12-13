@@ -59,12 +59,12 @@ public class SnakeFrame extends JFrame
         }
     }
 
-    public void gameOver() 
+    public void gameOver(String loser) 
     {
         int returnValue = JOptionPane.showConfirmDialog(this,
-                "Do you want to start a new game?", "GAME OVER!", JOptionPane
+                loser + " Lost! \nDo you want to start a new game?", "GAME OVER!", JOptionPane
                         .OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                        this.requestFocus();
+        this.requestFocus();
 
         switch (returnValue) 
         {

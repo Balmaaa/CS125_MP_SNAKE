@@ -3,9 +3,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Ellipse2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -294,11 +294,14 @@ public class GameField extends JPanel implements KeyListener {
 
     public void handleGameOver(boolean isPlayer1) 
     {
-        System.out.println((isPlayer1 ? "Player 1" : "Player 2") + " has lost!");
-        SwingUtilities.invokeLater(() -> snakeFrame.gameOver());
+        String loser = isPlayer1 ? "Player 1" : "Player 2";
+        System.out.println(loser + " has lost!");
+        
+        SwingUtilities.invokeLater(() -> snakeFrame.gameOver(loser));
 
         running = false;
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {}

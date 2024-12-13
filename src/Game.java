@@ -17,6 +17,7 @@ public class Game implements Runnable
 
     @Override
     public void run() {
+        
         while (player1.isAlive() && player2.isAlive()) {
             player1.update();
             player2.update();
@@ -27,6 +28,8 @@ public class Game implements Runnable
                 e.printStackTrace();
             }
         }
-        SwingUtilities.invokeLater(() -> frame.gameOver());
+
+        String loser = player1.isAlive() ? "Player 1" : "Player 2";
+        SwingUtilities.invokeLater(() -> frame.gameOver(loser));
     }
 }
