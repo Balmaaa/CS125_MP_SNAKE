@@ -219,7 +219,7 @@ public void paintComponent(Graphics g) {
     {
         // Generate random positions within the panel, excluding the top 40px for the scoreboard
         newX = rand.nextInt(PANEL_WIDTH / 15) * 15;
-        newY = rand.nextInt((PANEL_HEIGHT - 40) / 15) * 15 + 40; // Ensure Y is below the scoreboard (starting at Y=40)
+        newY = rand.nextInt((PANEL_HEIGHT - 60) / 15) * 15 + 60; // Ensure Y is below the scoreboard (starting at Y=40)
 
         validPosition = true;
 
