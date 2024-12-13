@@ -103,11 +103,26 @@ public class GameField extends JPanel implements KeyListener {
             case 1: // Down
                 newY += 20;
                 break;
-            case 2: newX -= 20;
+            case 2: // Left
+                newX -= 20;
                 break;
             case 3: // Right
                 newX += 20;
                 break;
+        }
+
+        // Check for wall collisions
+        if (newX < 0 || newX >= PANEL_WIDTH || newY < 0 || newY >= PANEL_HEIGHT) {
+            handleGameOver(true); // Player 1 loses
+            return;
+        }
+
+        // Check for self-collision
+        for (int i = 1; i < snakeParts1.size(); i++) {
+            if (snakeParts1.get(i).getX() == newX && snakeParts1.get(i).getY() == newY) {
+                handleGameOver(true); // Player 1 loses
+                return;
+            }
         }
 
         // Add new head to the snake
@@ -138,6 +153,20 @@ public class GameField extends JPanel implements KeyListener {
             case 3: // Right
                 newX += 20;
                 break;
+        }
+
+        // Check for wall collisions
+        if (newX < 0 || newX >= PANEL_WIDTH || newY < 0 || newY >= PANEL_HEIGHT) {
+            handleGameOver(false); // Player 2 loses
+            return;
+        }
+
+        // Check for self-collision
+        for (int i = 1; i < snakeParts2.size(); i++) {
+            if (snakeParts2.get(i).getX() == newX && snakeParts2.get(i).getY() == newY) {
+                handleGameOver(false); // Player 2 loses
+                return;
+            }
         }
 
         // Add new head to the snake
@@ -183,8 +212,16 @@ public class GameField extends JPanel implements KeyListener {
         }
     }
 
+    public void handleGameOver(boolean isPlayer1) {
+        // Logic to handle game over state
+        System.out.println((isPlayer1 ? "Player 1" : "Player 2") + " has lost!");
+        running = false; // Stop the game loop
+        // Additional game-over handling can be added here, such as displaying a message
+    }
+
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e)
+    {
         // Not used
     }
 

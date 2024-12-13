@@ -14,7 +14,6 @@ public class Snake {
     private boolean alive = true;
     private boolean isPlayer1;  
 
-    
     public Snake(GameField gameField, ScorePanel scorePanel, Direction initialDirection, 
                  int upKey, int leftKey, int downKey, int rightKey, boolean isPlayer1) {
         this.gameField = gameField;
@@ -23,18 +22,16 @@ public class Snake {
         this.direction = initialDirection;
         this.isPlayer1 = isPlayer1;
 
-        
-        
         double startX = 150 + (isPlayer1 ? 160 : 0);
         double startY = 150;
 
-        
+        // Initialize the snake parts
         parts.add(new Ellipse2D.Double(startX, startY, moveSize, moveSize)); 
         for (int i = 1; i < 4; i++) { 
             parts.add(new Ellipse2D.Double(startX, startY + i * moveSize, moveSize, moveSize)); 
         }
 
-        
+        // Add key bindings for movement
         addKeyBindings(upKey, leftKey, downKey, rightKey);
     }
 
@@ -72,11 +69,10 @@ public class Snake {
     public void update() {
         if (!alive) return;
 
-        
         double newX = parts.get(0).getX();
         double newY = parts.get(0).getY();
 
-        
+        // Update the position based on the current direction
         switch (direction) {
             case UP -> newY -= moveSize;
             case DOWN -> newY += moveSize;
@@ -84,41 +80,40 @@ public class Snake {
             case RIGHT -> newX += moveSize;
         }
 
-        
+        // Check for wall collisions
         if (newX < 0 || newX >= GameField.PANEL_WIDTH || newY < 0 || newY >= GameField.PANEL_HEIGHT) {
             System.out.println("Game Over: Snake hit the wall!");
             alive = false;
+            gameField.handleGameOver(isPlayer1); // Notify GameField of game over
             return;
         }
 
-        
-        for (int i = 0; i < parts.size(); i++) {
-            if (i > 0 && parts.get(i).getX() == newX && parts.get(i).getY() == newY) {
+        // Check for self-collisions
+        for (int i = 1; i < parts.size(); i++) {
+            if (parts.get(i).getX() == newX && parts.get(i).getY() == newY ) {
                 System.out.println("Game Over: Snake collided with itself!");
                 alive = false;
+                gameField.handleGameOver(isPlayer1); // Notify GameField of game over
                 return;
             }
         }
 
-        
+        // Move the snake
         parts.add(0, new Ellipse2D.Double(newX, newY, moveSize, moveSize));
 
         Apple apple = gameField.getApple();
         if (apple.getShape().intersects(parts.get(0).getBounds2D())) {
-            
             if (isPlayer1) {
                 scorePanel.increaseScore1();
             } else {
                 scorePanel.increaseScore2(); 
             }
             apple.reposition(); 
-            
         } else {
-            
-            parts.remove(parts.size() - 1);
+            parts.remove(parts.size() - 1); // Remove the last part of the snake
         }
 
-        
+        // Update the GameField with the current snake parts
         if (isPlayer1) {
             gameField.setSnakeParts1(parts);
         } else {
