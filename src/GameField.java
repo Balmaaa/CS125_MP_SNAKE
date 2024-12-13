@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JPanel;
 
 public class GameField extends JPanel implements KeyListener {
@@ -21,6 +22,8 @@ public class GameField extends JPanel implements KeyListener {
     private int snake1Direction; // 0: up, 1: down, 2: left, 3: right
     private int snake2Direction; // 0: up, 1: down, 2: left, 3: right
     private boolean running; // To control the game loop
+    private int score1; // Score for player 1
+    private int score2; // Score for player 2
 
     public GameField() {
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
@@ -50,6 +53,9 @@ public class GameField extends JPanel implements KeyListener {
         snakeParts2.add(new Ellipse2D.Double(100, 140, 20, 20));
         snakeParts2.add(new Ellipse2D.Double(100, 160, 20, 20));
         snake2Direction = 3; // Start moving to the right
+
+        score1 = 0; // Initialize score for player 1
+        score2 = 0; // Initialize score for player 2
     }
 
     @Override
@@ -73,6 +79,11 @@ public class GameField extends JPanel implements KeyListener {
         for (Ellipse2D e : snakeParts2) {
             g2.fill(e);
         }
+
+        // Draw scores
+        g2.setPaint(Color.WHITE);
+        g2.drawString("Player 1 Score: " + score1, 10, 20);
+        g2.drawString("Player 2 Score: " + score2, 10, 40);
     }
 
     // Game loop to update the snakes' positions
@@ -82,7 +93,7 @@ public class GameField extends JPanel implements KeyListener {
             moveSnake2();
             repaint();
             try {
-                Thread.sleep(100); // Control the speed of the game
+ Thread.sleep(100); // Control the speed of the game
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -125,12 +136,19 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
+        // Check for apple collision
+        if (apple.getShape().intersects(newX, newY, 20, 20)) {
+            score1++; // Increase score for player 1
+            repositionApple(); // Reposition the apple
+        } else {
+            // Remove the last part of the snake if not eating
+            if (snakeParts1.size() > 5) {
+                snakeParts1.remove(snakeParts1.size() - 1);
+            }
+        }
+
         // Add new head to the snake
         snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 20, 20));
-        // Remove the last part of the snake
-        if (snakeParts1.size() > 5) {
-            snakeParts1.remove(snakeParts1.size() - 1);
-        }
     }
 
     private void moveSnake2() {
@@ -169,12 +187,47 @@ public class GameField extends JPanel implements KeyListener {
             }
         }
 
+        // Check for apple collision
+        if (apple.getShape().intersects(newX, newY, 20, 20)) {
+            score2++; // Increase score for player 2
+            repositionApple(); // Reposition the apple
+        } else {
+            // Remove the last part of the snake if not eating
+            if (snakeParts2.size() > 5) {
+                snakeParts2.remove(snakeParts2.size() - 1);
+            }
+        }
+
         // Add new head to the snake
         snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 20, 20));
-        // Remove the last part of the snake
-        if (snakeParts2.size() > 5) {
-            snakeParts2.remove(snakeParts2.size() - 1);
-        }
+    }
+
+    private void repositionApple() {
+        Random rand = new Random();
+        int newX, newY;
+        boolean validPosition;
+
+        do {
+            newX = rand.nextInt(PANEL_WIDTH / 20) * 20;
+            newY = rand.nextInt(PANEL_HEIGHT / 20) * 20;
+            validPosition = true;
+
+            // Check if the new apple position overlaps with the snake parts
+            for (Ellipse2D.Double part : snakeParts1) {
+                if (part.getX() == newX && part.getY() == newY) {
+                    validPosition = false;
+                    break;
+                }
+            }
+            for (Ellipse2D.Double part : snakeParts2) {
+                if (part.getX() == newX && part.getY() == newY) {
+                    validPosition = false;
+                    break;
+                }
+            }
+        } while (!validPosition);
+
+        apple.setPosition(newX, newY); // Update the apple's position
     }
 
     @Override
@@ -220,8 +273,7 @@ public class GameField extends JPanel implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e)
-    {
+    public void keyReleased(KeyEvent e) {
         // Not used
     }
 

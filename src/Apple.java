@@ -18,10 +18,16 @@ public class Apple {
         return shape;
     }
 
-    public void relocate() {
-        int x = random.nextInt(30) * SIZE; // Random x position within the game field
-        int y = random.nextInt(30) * SIZE; // Random y position within the game field
+    // Method to set the position of the apple
+    public void setPosition(int x, int y) {
         shape.setFrame(x, y, SIZE, SIZE); // Update the position of the apple
+    }
+
+    // Method to randomly relocate the apple within the game field
+    public void relocate() {
+        int x = random.nextInt((GameField.PANEL_WIDTH / SIZE)) * SIZE; // Random x position within the game field
+        int y = random.nextInt((GameField.PANEL_HEIGHT / SIZE)) * SIZE; // Random y position within the game field
+        setPosition(x, y); // Update the position of the apple
     }
 
     public void draw(Graphics g) {
