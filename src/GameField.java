@@ -3,15 +3,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Ellipse2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class GameField extends JPanel implements KeyListener {
 
@@ -20,19 +19,16 @@ public class GameField extends JPanel implements KeyListener {
     private List<Ellipse2D.Double> snakeParts1;
     private List<Ellipse2D.Double> snakeParts2;
     private Apple apple;
-    private SnakeFrame snakeFrame;
-
-    // Player 1 and 2 Snake Movement
     private int snake1Direction;
     private int snake2Direction;
     private boolean running;
-    // Player 1 and 2 Scoreboards
     private int score1;
     private int score2;
+    private SnakeFrame snakeFrame; // Reference to the SnakeFrame
 
-    public GameField(SnakeFrame snakeFrame)
-    {
-        this.snakeFrame = snakeFrame;
+    // Constructor that accepts a SnakeFrame instance
+    public GameField(SnakeFrame snakeFrame) {
+        this.snakeFrame = snakeFrame; // Store the reference
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setBackground(Color.BLACK);
         initDefaults();
@@ -42,37 +38,23 @@ public class GameField extends JPanel implements KeyListener {
         new Thread(this::gameLoop).start();
     }
 
-    public Apple getApple() {
-        return this.apple; 
-    }
-    public void setSnakeParts1(List<Ellipse2D.Double> snakeParts1) {
-        this.snakeParts1 = snakeParts1; 
-    }
-    public void setSnakeParts2(List<Ellipse2D.Double> snakeParts2) {
-        this.snakeParts2 = snakeParts2; 
-    }
-
-    
-    
-
-    public void initDefaults()
-    {
+    public synchronized void initDefaults() {
         apple = new Apple(300, 300);
         snakeParts1 = Collections.synchronizedList(new ArrayList<>());
         snakeParts2 = Collections.synchronizedList(new ArrayList<>());
 
         // Player 1 Snake
-        snakeParts1.add(new Ellipse2D.Double(400, 300, 10, 10));
-        snakeParts1.add(new Ellipse2D.Double(400, 310, 10, 10));
-        snakeParts1.add(new Ellipse2D.Double(400, 340, 10, 10));
-        snakeParts1.add(new Ellipse2D.Double(400, 360, 10, 10));
+        snakeParts1.add(new Ellipse2D.Double(400, 300, 20, 20));
+        snakeParts1.add(new Ellipse2D.Double(400, 320, 20, 20));
+        snakeParts1.add(new Ellipse2D.Double(400, 340, 20, 20));
+        snakeParts1.add(new Ellipse2D.Double(400, 360, 20, 20));
         snake1Direction = 3;
 
-        // Player 21 Snake
-        snakeParts2.add(new Ellipse2D.Double(100, 100, 10, 10));
-        snakeParts2.add(new Ellipse2D.Double(100, 110, 10, 10));
-        snakeParts2.add(new Ellipse2D.Double(100, 140, 10, 10));
-        snakeParts2.add(new Ellipse2D.Double(100, 160, 10, 10));
+        // Player 2 Snake
+        snakeParts2.add(new Ellipse2D.Double(100, 100, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(100, 120, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(100, 140, 20, 20));
+        snakeParts2.add(new Ellipse2D.Double(100, 160, 20, 20));
         snake2Direction = 3;
 
         // Player Scoreboard
@@ -128,12 +110,9 @@ public void paintComponent(Graphics g) {
             moveSnake1();
             moveSnake2();
             repaint();
-            try 
-            {
+            try {
                 Thread.sleep(100);
-            } 
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -146,16 +125,16 @@ public void paintComponent(Graphics g) {
     
         switch (snake1Direction) {
             case 0: // Up
-                newY -= 10;
+                newY -= 20;
                 break;
             case 1: // Down
-                newY += 10;
+                newY += 20;
                 break;
             case 2: // Left
-                newX -= 10;
+                newX -=  20;
                 break;
             case 3: // Right
-                newX += 10;
+                newX += 20;
                 break;
         }
     
@@ -191,16 +170,16 @@ public void paintComponent(Graphics g) {
     
         switch (snake2Direction) {
             case 0: // Up
-                newY -= 10;
+                newY -= 20;
                 break;
             case 1: // Down
-                newY += 10;
+                newY += 20;
                 break;
             case 2: // Left
-                newX -= 10;
+                newX -= 20;
                 break;
             case 3: // Right
-                newX += 10;
+                newX += 20;
                 break;
         }
     
@@ -230,7 +209,7 @@ public void paintComponent(Graphics g) {
     }
     
 
-    private void repositionApple()
+    private synchronized void repositionApple()
     {
         Random rand = new Random();
         int newX, newY;
@@ -238,8 +217,8 @@ public void paintComponent(Graphics g) {
 
         do 
         {
-            newX = rand.nextInt(PANEL_WIDTH / 10) * 10;
-            newY = rand.nextInt(PANEL_HEIGHT / 10) * 10;
+            newX = rand.nextInt(PANEL_WIDTH / 20) * 20;
+            newY = rand.nextInt(PANEL_HEIGHT / 20) * 20;
             validPosition = true;
 
             for (Ellipse2D.Double part : snakeParts1) 
@@ -258,8 +237,7 @@ public void paintComponent(Graphics g) {
                     break;
                 }
             }
-        } 
-        while (!validPosition);
+        } while (!validPosition);
 
         apple.setPosition(newX, newY);
     }
@@ -267,8 +245,8 @@ public void paintComponent(Graphics g) {
     @Override
     public void keyPressed(KeyEvent e)
     {
-        switch (e.getKeyCode()) 
-        {
+        switch (e.getKeyCode())
+         {
             case KeyEvent.VK_W:
                 if (snake1Direction != 1) snake1Direction = 0; // Up
                 break;
@@ -283,8 +261,7 @@ public void paintComponent(Graphics g) {
                 break;
         }
 
-        switch (e.getKeyCode()) 
-        {
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 if (snake2Direction != 1) snake2Direction = 0; // Up
                 break;
@@ -297,19 +274,14 @@ public void paintComponent(Graphics g) {
             case KeyEvent.VK_RIGHT:
                 if (snake2Direction != 2) snake2Direction = 3; // Right
                 break;
+            }
         }
-    }
 
-    public void handleGameOver(boolean isPlayer1) 
+    public synchronized void handleGameOver(boolean isPlayer1) 
     {
-        String loser = isPlayer1 ? "Player 1" : "Player 2";
-        System.out.println(loser + " has lost!");
-        
-        SwingUtilities.invokeLater(() -> snakeFrame.gameOver(loser));
-
+        System.out.println((isPlayer1 ? "Player 1" : "Player 2") + " has lost!");
         running = false;
     }
-
 
     @Override
     public void keyReleased(KeyEvent e) {}
