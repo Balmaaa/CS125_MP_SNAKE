@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class GameField extends JPanel implements KeyListener {
 
@@ -19,6 +20,8 @@ public class GameField extends JPanel implements KeyListener {
     private List<Ellipse2D.Double> snakeParts1;
     private List<Ellipse2D.Double> snakeParts2;
     private Apple apple;
+    private SnakeFrame snakeFrame;
+
     // Player 1 and 2 Snake Movement
     private int snake1Direction;
     private int snake2Direction;
@@ -27,8 +30,9 @@ public class GameField extends JPanel implements KeyListener {
     private int score1;
     private int score2;
 
-    public GameField()
+    public GameField(SnakeFrame snakeFrame)
     {
+        this.snakeFrame = snakeFrame;
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setBackground(Color.BLACK);
         initDefaults();
@@ -291,6 +295,8 @@ public class GameField extends JPanel implements KeyListener {
     public void handleGameOver(boolean isPlayer1) 
     {
         System.out.println((isPlayer1 ? "Player 1" : "Player 2") + " has lost!");
+        SwingUtilities.invokeLater(() -> snakeFrame.gameOver());
+
         running = false;
     }
 

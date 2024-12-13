@@ -1,3 +1,5 @@
+import javax.swing.SwingUtilities;
+
 public class Game implements Runnable
 {
     private GameField gameField;
@@ -15,20 +17,16 @@ public class Game implements Runnable
 
     @Override
     public void run() {
-        while (player1.isAlive() && player2.isAlive())
-        {
+        while (player1.isAlive() && player2.isAlive()) {
             player1.update();
             player2.update();
             gameField.repaint();
-            try
-            {
-                Thread.sleep(100); // Game Speed
-            } 
-            catch (InterruptedException e) 
-            {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        frame.gameOver();
+        SwingUtilities.invokeLater(() -> frame.gameOver());
     }
 }

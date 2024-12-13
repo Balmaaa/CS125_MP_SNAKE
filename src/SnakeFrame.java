@@ -25,7 +25,7 @@ public class SnakeFrame extends JFrame
         scorePanel = new ScorePanel();
         add(scorePanel, new GBC(0, 8, 8, 1));
 
-        gameField = new GameField();
+        gameField = new GameField(this);
         add(gameField, new GBC(0, 0, 8, 8));
     }
 
@@ -64,6 +64,7 @@ public class SnakeFrame extends JFrame
         int returnValue = JOptionPane.showConfirmDialog(this,
                 "Do you want to start a new game?", "GAME OVER!", JOptionPane
                         .OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                        this.requestFocus();
 
         switch (returnValue) 
         {
