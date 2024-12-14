@@ -3,9 +3,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Ellipse2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +26,9 @@ public class GameField extends JPanel implements KeyListener {
     private int score1;
     private int score2;
     private SnakeFrame snakeFrame; // Reference to the SnakeFrame
+    private Snake player1;
+    private Snake player2;
+
 
     // Constructor that accepts a SnakeFrame instance
     public GameField(SnakeFrame snakeFrame) {
@@ -64,7 +67,7 @@ public class GameField extends JPanel implements KeyListener {
     }
 
     @Override
-public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -118,7 +121,17 @@ public void paintComponent(Graphics g) {
             }
         }
     }
-
+    public Snake getPlayer1() {
+        return player1;
+    }
+    
+    public Snake getPlayer2() {
+        return player2;
+    }
+    public Apple getApple() {
+        return apple; 
+    }
+    
     private void moveSnake1() {
         Ellipse2D.Double head = snakeParts1.get(0);
         double newX = head.getX();
