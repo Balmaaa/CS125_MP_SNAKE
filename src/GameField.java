@@ -136,7 +136,8 @@ public class GameField extends JPanel implements KeyListener {
         Ellipse2D.Double head = snakeParts1.get(0);
         double newX = head.getX();
         double newY = head.getY();
-
+    
+        // Move snake based on direction
         switch (snake1Direction) {
             case 0: // Up
                 newY -= 15;
@@ -151,20 +152,30 @@ public class GameField extends JPanel implements KeyListener {
                 newX += 15;
                 break;
         }
-
-        // Prevent the snake from moving into the scoreboard area (top 50 pixels)
+    
+        // Check for boundary collision (wall collision)
         if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) {
-            handleGameOver(true);
+            handleGameOver(true);  // Player 1 lost
             return;
         }
-
+    
+        // Check if snake 1 collides with itself
         for (int i = 1; i < snakeParts1.size(); i++) {
             if (snakeParts1.get(i).getX() == newX && snakeParts1.get(i).getY() == newY) {
-                handleGameOver(true);
+                handleGameOver(true);  // Player 1 lost
                 return;
             }
         }
-
+    
+        // Check for snake 1 colliding with snake 2
+        for (Ellipse2D.Double part : snakeParts2) {
+            if (part.getX() == newX && part.getY() == newY) {
+                handleGameOver(true);  // Player 1 lost
+                return;
+            }
+        }
+    
+        // Handle apple collision
         if (apple.getShape().intersects(newX, newY, 15, 15)) {
             score1++;
             repositionApple();
@@ -173,15 +184,17 @@ public class GameField extends JPanel implements KeyListener {
                 snakeParts1.remove(snakeParts1.size() - 1);
             }
         }
-
+    
+        // Add new head
         snakeParts1.add(0, new Ellipse2D.Double(newX, newY, 15, 15));
     }
-
+    
     private void moveSnake2() {
         Ellipse2D.Double head = snakeParts2.get(0);
         double newX = head.getX();
         double newY = head.getY();
-
+    
+        // Move snake based on direction
         switch (snake2Direction) {
             case 0: // Up
                 newY -= 15;
@@ -196,20 +209,30 @@ public class GameField extends JPanel implements KeyListener {
                 newX += 15;
                 break;
         }
-
-        // Prevent the snake from moving into the scoreboard area (top 50 pixels)
+    
+        // Check for boundary collision (wall collision)
         if (newX < 0 || newX >= PANEL_WIDTH || newY < 50 || newY >= PANEL_HEIGHT) {
-            handleGameOver(false);
+            handleGameOver(false);  // Player 2 lost
             return;
         }
-
+    
+        // Check if snake 2 collides with itself
         for (int i = 1; i < snakeParts2.size(); i++) {
             if (snakeParts2.get(i).getX() == newX && snakeParts2.get(i).getY() == newY) {
-                handleGameOver(false);
+                handleGameOver(false);  // Player 2 lost
                 return;
             }
         }
-
+    
+        // Check for snake 2 colliding with snake 1
+        for (Ellipse2D.Double part : snakeParts1) {
+            if (part.getX() == newX && part.getY() == newY) {
+                handleGameOver(false);  // Player 2 lost
+                return;
+            }
+        }
+    
+        // Handle apple collision
         if (apple.getShape().intersects(newX, newY, 15, 15)) {
             score2++;
             repositionApple();
@@ -218,9 +241,11 @@ public class GameField extends JPanel implements KeyListener {
                 snakeParts2.remove(snakeParts2.size() - 1);
             }
         }
-
+    
+        // Add new head
         snakeParts2.add(0, new Ellipse2D.Double(newX, newY, 15, 15));
     }
+    
 
     private void repositionApple()
 {

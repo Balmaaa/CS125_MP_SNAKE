@@ -19,8 +19,6 @@ public class Game implements Runnable
     public void run() {
         
         while (player1.isAlive() && player2.isAlive()) {
-            player1.update();
-            player2.update();
             gameField.repaint();
             try {
                 Thread.sleep(100);
