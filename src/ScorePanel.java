@@ -1,13 +1,9 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
 import javax.swing.JPanel;
 
 public class ScorePanel extends JPanel 
 {
-    private int score1 = 0;
-    private int score2 = 0;
+    int score1 = 0;
+    int score2 = 0;
 
     public synchronized void increaseScore1() 
     {
