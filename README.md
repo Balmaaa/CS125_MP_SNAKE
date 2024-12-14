@@ -9,6 +9,13 @@ Old versions of Snake uses sequential where the flow is sequenced as:
 
 However, this modern take on Snake utilizes synchronization to allow two snakes to move simultaneously whilst having all other elements occur and function alongside each other.
 
+## Project Flow
+1. Drafting of Snake Game Design and Flow
+2. Developed foundation and base layout
+3. Improved implementation of synchronization
+4. Added UI changes and modifications
+5. Refined overall project
+
 ## ⚙️ Prerequisites
 - Visual Studio Code / IntelliJ (Any IDE will work as well)
 - Java Development Kit (JDK) Version 21 or 23 (Preferably Ver. 23)
