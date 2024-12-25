@@ -1,33 +1,82 @@
-import javax.swing.SwingUtilities;
-
-public class Game implements Runnable
+public class Game implements Runnable 
 {
     private GameField gameField;
     private Snake player1;
     private Snake player2;
-    private SnakeFrame frame;
+    private boolean running = true;
+    private boolean canMovePlayer1 = true;
+    private boolean canMovePlayer2 = true;
 
-    public Game(GameField gameField, Snake player1, Snake player2, SnakeFrame frame)
+    public Game(GameField gameField, Snake player1, Snake player2) 
     {
         this.gameField = gameField;
         this.player1 = player1;
         this.player2 = player2;
-        this.frame = frame;
     }
 
     @Override
-    public void run() {
-        
-        while (player1.isAlive() && player2.isAlive()) {
-            gameField.repaint();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public void run() 
+    {
+        // Player 1 Thread
+        Thread player1Thread = new Thread(() -> {
+            while (running) 
+            {
+                if (canMovePlayer1) 
+                {
+                    player1.move();
+                }
+                try 
+                {
+                    Thread.sleep(150);
+                } 
+                catch (InterruptedException e) 
+                {
+                    e.printStackTrace();
+                }
             }
-        }
+        });
 
-        String loser = player1.isAlive() ? "Player 1" : "Player 2";
-        SwingUtilities.invokeLater(() -> frame.gameOver(loser));
+        // Player 2 Thread
+        Thread player2Thread = new Thread(() -> {
+            while (running) 
+            {
+                if (canMovePlayer2)
+                {
+                    player2.move();
+                }
+                try 
+                {
+                    Thread.sleep(150);
+                } 
+                catch (InterruptedException e) 
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // Start Snake Threads
+        player1Thread.start();
+        player2Thread.start();
+
+        try 
+        {
+            player1Thread.join();
+            player2Thread.join();
+        } 
+        catch (InterruptedException e) 
+        {
+            e.printStackTrace();
+        }
     }
+
+    public void setPlayer1Pause() { canMovePlayer1 = false; }
+
+    public void setPlayer1Resume() { canMovePlayer1 = true; }
+
+    public void setPlayer2Pause() { canMovePlayer2 = false; }
+
+    public void setPlayer2Resume() { canMovePlayer2 = true; }
+
+    public void stopGame() { running = false; }
 }
