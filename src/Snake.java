@@ -5,19 +5,22 @@ import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import java.awt.event.ActionEvent;
 
-public class Snake {
+public class Snake 
+{
     private List<Ellipse2D.Double> parts;
     private Direction direction;
     private int moveSize = 15;
     private GameField gameField;
-    private ScorePanel scorePanel; // Keep this for score tracking
-    private boolean alive = true;  
-    private boolean isPlayer1;  
+    private ScorePanel scorePanel;
+    private boolean alive = true;
+    private boolean isPlayer1;
+    private boolean paused = false;
+    private long sleepTime = 100;
+    private Thread snakeThread;
 
-    public Snake(GameField gameField, ScorePanel scorePanel, Direction initialDirection, 
-                 int upKey, int leftKey, int downKey, int rightKey, boolean isPlayer1) {
+    public Snake(GameField gameField, ScorePanel scorePanel, Direction initialDirection, int upKey, int leftKey, int downKey, int rightKey, boolean isPlayer1) {
         this.gameField = gameField;
-        this.scorePanel = scorePanel; // Initialize score panel
+        this.scorePanel = scorePanel;
         this.parts = new ArrayList<>();
         this.direction = initialDirection;
         this.isPlayer1 = isPlayer1;
@@ -25,9 +28,10 @@ public class Snake {
         double startX = 150 + (isPlayer1 ? 160 : 0);
         double startY = 150;
 
-        // Snake Parts
+        // Manage Snake Parts
         parts.add(new Ellipse2D.Double(startX, startY, moveSize, moveSize)); 
-        for (int i = 1; i < 4; i++) { 
+        for (int i = 1; i < 4; i++) 
+        { 
             parts.add(new Ellipse2D.Double(startX, startY + i * moveSize, moveSize, moveSize)); 
         }
 
@@ -35,7 +39,8 @@ public class Snake {
         addKeyBindings(upKey, leftKey, downKey, rightKey);
     }
 
-    private void addKeyBindings(int upKey, int leftKey, int downKey, int rightKey) {
+    private void addKeyBindings(int upKey, int leftKey, int downKey, int rightKey) 
+    {
         gameField.getInputMap().put(KeyStroke.getKeyStroke(upKey, 0), "moveUp" + (isPlayer1 ? "1" : "2"));
         gameField.getActionMap().put("moveUp" + (isPlayer1 ? "1" : "2"), new MoveAction(this, Direction.UP));
 
@@ -51,25 +56,26 @@ public class Snake {
         gameField.requestFocusInWindow(); 
     }
 
-    public void changeDirection(Direction newDirection) {
-        if (alive) {
-            // Prevent the snake from reversing direction
-            if ((this.direction == Direction.UP && newDirection != Direction.DOWN) ||
-                (this.direction == Direction.DOWN && newDirection != Direction.UP) ||
-                (this.direction == Direction.LEFT && newDirection != Direction.RIGHT) ||
-                (this.direction == Direction.RIGHT && newDirection != Direction.LEFT)) {
+    public void changeDirection(Direction newDirection) 
+    {
+        if (alive && !paused) 
+        {
+            if ((this.direction == Direction.UP && newDirection != Direction.DOWN) || (this.direction == Direction.DOWN && newDirection != Direction.UP) || (this.direction == Direction.LEFT && newDirection != Direction.RIGHT) || (this.direction == Direction.RIGHT && newDirection != Direction.LEFT)) 
+            {
                 this.direction = newDirection;
             }
         }
     }
 
-    public void move() {
-        if (alive) {
-            // Move the snake by adding a new head in the direction of movement
+    public void move() 
+    {
+        if (alive && !paused) 
+        {
             double headX = parts.get(0).getX();
             double headY = parts.get(0).getY();
 
-            switch (direction) {
+            switch (direction) 
+            {
                 case UP:
                     headY -= moveSize;
                     break;
@@ -84,51 +90,97 @@ public class Snake {
                     break;
             }
 
-            // Add new head
+            // Add New Snake Head (1 Unit)
             parts.add(0, new Ellipse2D.Double(headX, headY, moveSize, moveSize));
 
-            // Remove the tail
-            parts .remove(parts.size() - 1);
+            // Remove Snake Tail
+            parts.remove(parts.size() - 1);
+            
+            gameField.repaint();
         }
     }
 
-    public List<Ellipse2D.Double> getParts() {
-        return parts;
-    }
+    public List<Ellipse2D.Double> getParts() { return parts; }
 
-    public boolean isAlive() {
-        return alive;
-    }
+    public boolean isAlive() { return alive; }
 
-    public void reset() {
-        parts.clear(); // Clear any existing parts
-        alive = true; // Reset the alive status
-        direction = Direction.UP; // Reset to initial direction
+    public void reset() 
+    {
+        parts.clear();
+        alive = true;
+        direction = Direction.UP;
+        paused = false;
         double startX = 150 + (isPlayer1 ? 160 : 0);
         double startY = 150;
 
-        // Reinitialize snake parts
         parts.add(new Ellipse2D.Double(startX, startY, moveSize, moveSize)); 
-        for (int i = 1; i < 4; i++) { 
+        for (int i = 1; i < 4; i++) 
+        { 
             parts.add(new Ellipse2D.Double(startX, startY + i * moveSize, moveSize, moveSize)); 
         }
     }
 
-    public void moveSnake() {
-        move();
+    public void runSnake() 
+    {
+        snakeThread = new Thread(() -> {
+            while (alive) 
+            {
+                synchronized (this) 
+                {
+                    if (paused) 
+                    {
+                        try 
+                        {
+                            wait();
+                        } 
+                        catch (InterruptedException e) 
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                move();
+                try 
+                {
+                    Thread.sleep(100);
+                } 
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        snakeThread.start();
     }
 
-    private class MoveAction extends AbstractAction {
+    public boolean isPaused() { return paused; }
+
+    public void setPaused(boolean paused) 
+    {
+        this.paused = paused;
+        if (!paused) 
+        {
+            synchronized (this) 
+            {
+                notify();
+            }
+        }
+    }
+
+    private class MoveAction extends AbstractAction 
+    {
         private Snake snake;
         private Direction direction;
 
-        public MoveAction(Snake snake, Direction direction) {
+        public MoveAction(Snake snake, Direction direction) 
+        {
             this.snake = snake;
             this.direction = direction;
         }
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) 
+        {
             snake.changeDirection(direction);
         }
     }
