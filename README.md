@@ -3,11 +3,7 @@
 A step beyond reviving old-school classics. Snake is an old-school computer game with a premise of a snake controlled by the user with a goal of consuming as many apples as possible. Now, this is a modern take on snake with a twist... MULTIPLAYER GAMEPLAY!
 
 ## Synchronization & Threading in Snake Multiplayer
-Old versions of Snake uses sequential where the flow is sequenced as:
-
-        Snake -> Apple -> Register Score -> Allow Snake to Move
-
-However, this modern take on Snake utilizes synchronization to allow two snakes/ multiple threads to move simultaneously whilst having all other elements occur and function alongside each other.
+        Google Docs : https://docs.google.com/document/d/1zda9oTbggLPpfov-ItR0_P3OuuDIHK7cjqg8ZO01KO4/edit?usp=sharing
 
 ## Project Flow
 1. Drafting of Snake Game Design and Flow
