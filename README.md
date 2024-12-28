@@ -25,7 +25,7 @@ However, this modern take on Snake utilizes synchronization to allow two snakes/
 ## 🎮 How To Run?
 1. Clone GitHub Repository
 
-        git clone https://github.com/Balmaaa/CS125_MP_SNAKE.git
+        git clone [repository-url]
 2. Open the cloned repository with the IDE of your choice
 3. Locate the file GameMenu.java
 

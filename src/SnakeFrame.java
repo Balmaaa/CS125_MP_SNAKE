@@ -27,8 +27,8 @@ public class SnakeFrame extends JFrame {
     }
 
     private void initGame() {
-        player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true); // Updated
-        player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false); // Updated
+        player1 = new Snake(gameField, scorePanel, Direction.UP, KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D, true);
+        player2 = new Snake(gameField, scorePanel, Direction.DOWN, KeyEvent.VK_I, KeyEvent.VK_J, KeyEvent.VK_K, KeyEvent.VK_L, false);
         Runnable gameRunnable = new Game(gameField, player1, player2, this);
         gameThread = new Thread(gameRunnable);
         gameField.requestFocusInWindow(); 
